@@ -1,6 +1,6 @@
 const { Conflict } = require('http-errors');
 const gravatar = require('gravatar');
-const { uuid } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const { sendEmail } = require('../../helpers');
 const { User } = require('../../models');
@@ -11,7 +11,7 @@ const register = async (req, res) => {
   if (user) {
     throw new Conflict(`User with ${email} already exist`);
   }
-  const verificationToken = uuid();
+  const verificationToken = uuidv4();
   const avatarURL = gravatar.url(email);
   const newUser = new User({ name, email, avatarURL, verificationToken });
 
