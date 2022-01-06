@@ -1,9 +1,3 @@
-const register = require('./register');
-const login = require('./login');
-const logout = require('./logout');
+const Auth = require('./auth');
 
-module.exports = {
-  register,
-  login,
-  logout,
-};
+module.exports = Auth;
