@@ -2,6 +2,8 @@ const { User } = require('../../models');
 const path = require('path');
 const fs = require('fs/promises');
 const { NotFound } = require('http-errors');
+const createError = require('http-errors');
+const sendEmail = require('../../helpers/sendEmail');
 
 const avatarsDir = path.join(__dirname, '../../', 'public', 'avatars');
 
@@ -50,6 +52,25 @@ class Users {
     res.json({
       message: 'Verify success',
     });
+  }
+
+  async resending(req, res) {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!email) {
+      throw createError(400, 'missing required field email');
+    }
+    if (user.verify) {
+      throw createError(400, 'Verification has already been passed');
+    }
+    const verificationToken = user.verificationToken;
+    const mail = {
+      to: email,
+      subject: 'Подтверждения email',
+      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Подтвердить email</a>`,
+    };
+    await sendEmail(mail);
+    res.json('Email resending');
   }
 }
 
