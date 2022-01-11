@@ -1,7 +1,3 @@
-const getCurrent = require('./getCurrent');
-const updateAvatar = require('./updateAvatar');
+const Users = require('./users');
 
-module.exports = {
-  getCurrent,
-  updateAvatar,
-};
+module.exports = Users;
